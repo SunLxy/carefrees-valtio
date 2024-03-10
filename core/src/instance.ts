@@ -92,4 +92,8 @@ export class ProxyInstanceCache {
   isProxy = (name: string) => {
     return this.proxyMap.has(name)
   }
+  /**存储实例*/
+  setProxy = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(name: string, instance: K) => {
+    return this.proxyMap.set(name, instance)
+  }
 }
