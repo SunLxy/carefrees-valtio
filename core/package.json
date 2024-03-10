@@ -1,0 +1,28 @@
+{
+  "name": "@carefrees/valtio",
+  "version": "0.0.0",
+  "description": "",
+  "author": "SunLxy <1011771396@qq.com>",
+  "homepage": "",
+  "license": "ISC",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib",
+    "src"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsbb build",
+    "watch": "tsbb watch"
+  },
+  "dependencies": {
+    "valtio": "~1.13.2"
+  },
+  "devDependencies": {
+    "@types/react": "~18.2.15",
+    "react": "~18.2.0"
+  }
+}
