@@ -7,8 +7,10 @@ import { proxy, ref } from "valtio"
  * */
 export class ProxyInstanceObject<T extends Object = any> {
   store: T;
-  constructor(state: T) {
-    this.store = proxy(state);
+  /**初始store对象*/
+  _cstor = <K = typeof this>(state: T) => {
+    this.store = proxy(state) as T;
+    return this as unknown as K;
   }
   /**设置对象属性值*/
   _setStore = <K = T>(value?: Partial<K>) => {
@@ -72,7 +74,7 @@ export class ProxyInstanceCache {
     if (proxyObject) {
       instProxy = proxyObject
     } else if (!isNotCreate) {
-      instProxy = new ProxyInstanceObject(inital || {}) as K
+      instProxy = new ProxyInstanceObject<T>()._cstor(inital || {} as T) as K
     }
     if (name && instProxy) {
       this.proxyMap.set(name, instProxy)

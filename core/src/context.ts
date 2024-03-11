@@ -28,7 +28,7 @@ export const cacheInstance = new ProxyInstanceCache()
 
 /**创建组合Provider和useContext*/
 export const createProxyInstanceContext = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(options: CreateProxyInstanceContextOptions<T, K>) => {
-  let proxyInstance = options.instance ? options.instance : (new ProxyInstanceObject<T>(options.initalValue || {} as T) as K)
+  let proxyInstance = options.instance ? options.instance : (new ProxyInstanceObject<T>()._cstor(options.initalValue || {} as T) as K)
   const Context = createContext<ContextType<T, K>>({ instance: proxyInstance, name: options.name })
   const newCacheInstance = options.cacheInstance || cacheInstance
   /**
