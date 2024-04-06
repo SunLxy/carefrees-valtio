@@ -7,8 +7,12 @@ import { proxy, ref } from "valtio"
  * */
 export class ProxyInstanceObject<T extends Object = any> {
   store: T;
+  namespace?: string
+  constructor(namespace?: string) {
+    this.namespace = namespace
+  }
   /**初始store对象*/
-  _cstor = <K = typeof this>(state: T) => {
+  _ctor = <K = typeof this>(state: T) => {
     this.store = proxy(state) as T;
     return this as unknown as K;
   }
@@ -49,6 +53,14 @@ export class ProxyInstanceObject<T extends Object = any> {
     }
   }
 
+  /**根据名称获取某个实例*/
+  _getProxyCache = (name: string) => {
+    return cacheInstance.getProxy(name);
+  }
+  /**获取缓存数据实例*/
+  _getAllProxyCache = () => {
+    return cacheInstance
+  }
 }
 
 export interface ProxyCacheInstanceOptions<T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>> {
@@ -74,7 +86,7 @@ export class ProxyInstanceCache {
     if (proxyObject) {
       instProxy = proxyObject
     } else if (!isNotCreate) {
-      instProxy = new ProxyInstanceObject<T>()._cstor(inital || {} as T) as K
+      instProxy = new ProxyInstanceObject<T>()._ctor(inital || {} as T) as K
     }
     if (name && instProxy) {
       this.proxyMap.set(name, instProxy)
@@ -99,3 +111,8 @@ export class ProxyInstanceCache {
     return this.proxyMap.set(name, instance)
   }
 }
+
+/**内置缓存数据实例*/
+export const cacheInstance = new ProxyInstanceCache()
+
+export default cacheInstance
