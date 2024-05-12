@@ -4,13 +4,13 @@ import { ProxyInstanceObject, cacheInstance } from "./instance"
 
 const MainProxyContext = createContext<{ namespace: string, proxyInstance: ProxyInstanceObject<any> }>({ namespace: undefined, proxyInstance: undefined })
 
-export interface PageProxyNameProviderProps<T> {
+export interface MainProxyProviderProps<T> {
   children: React.ReactNode,
   proxyInstance?: T
   namespace?: string,
 }
 
-export const MainProxyProvider = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(props: PageProxyNameProviderProps<K>) => {
+export const MainProxyProvider = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(props: MainProxyProviderProps<K>) => {
   return createElement(MainProxyContext.Provider, {
     value: { namespace: props.namespace, proxyInstance: props.proxyInstance },
     children: props.children
