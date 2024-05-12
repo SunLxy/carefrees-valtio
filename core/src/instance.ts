@@ -28,7 +28,12 @@ export class ProxyInstanceObject<T extends Object = any> {
   _setRefStore = <K = T>(value?: Partial<K>) => {
     if (value) {
       Object.keys(value).forEach((key) => {
-        this.store[key] = this._createRef(value[key])
+        const newValue = value[key];
+        if (typeof newValue === "object" && newValue) {
+          this.store[key] = this._createRef(value[key])
+        } else {
+          this.store[key] = value[key]
+        }
       })
     }
   }
