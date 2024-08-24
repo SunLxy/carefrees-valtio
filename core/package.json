@@ -10,6 +10,7 @@
   "module": "esm/index.js",
   "files": [
     "lib",
+    "esm",
     "src"
   ],
   "publishConfig": {
