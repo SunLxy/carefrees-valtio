@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "author": "SunLxy <1011771396@qq.com>",
-  "homepage": "",
+  "homepage": "https://github.com/SunLxy/carefrees-valtio",
   "license": "ISC",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
