@@ -75,11 +75,30 @@ export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanc
   return { state, dispatch, namespace, proxyInstance, temps }
 }
 
+
+/**
+ * 状态管理(===>useState)
+*/
+export const useProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(inital: T) => {
+  const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor<K>(inital))
+  const state = useSnapshot(proxyInstance.store);
+  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
+    if (type === 'ref') {
+      proxyInstance._setStore(value)
+    } else {
+      proxyInstance._setRefStore(value)
+    }
+  }
+  /**为了解决没有取值时直接重新渲染问题*/
+  const temps = (state as any).___temps;
+  return { state, dispatch, proxyInstance, temps }
+}
+
 /**
  * 根据存储名称获取实例
 */
 export const useMainProxyNameStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(namespace: string) => {
-  const [proxyInstance] = useState(cacheInstance.getProxy<T, K>(namespace))
+  const [proxyInstance] = useState(cacheInstance.createProxy<T, K>({ name: namespace }))
   const state = useSnapshot(proxyInstance.store);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
     if (type === 'ref') {

@@ -16,14 +16,21 @@ export class ProxyInstanceObject<T extends Object = any> {
   }
   /**设置对象属性值*/
   _setStore = <K = T>(value?: Partial<K>) => {
+    if (!this.store) {
+      this.store = proxy({}) as T;
+    }
     if (value) {
       Object.keys(value).forEach((key) => {
         this.store[key] = value[key]
       })
     }
+    return this;
   }
   /**设置不做监听的ref对象属性值*/
   _setRefStore = <K = T>(value?: Partial<K>) => {
+    if (!this.store) {
+      this.store = proxy({}) as T;
+    }
     if (value) {
       Object.keys(value).forEach((key) => {
         const newValue = value[key];
@@ -34,6 +41,7 @@ export class ProxyInstanceObject<T extends Object = any> {
         }
       })
     }
+    return this;
   }
   /**创建 ref 对象 (ref对象不做监听更新)*/
   _createRef = <K extends Object = any>(inital?: K) => {
