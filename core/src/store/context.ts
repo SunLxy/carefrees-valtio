@@ -28,7 +28,7 @@ export const createCommonMainStore = <T extends Object = any, K extends ProxyIns
   const useMainProxyStore = () => {
     const state = useSnapshot<T>(proxyInstance.store);
     const attr = useContext(MainProxyContext)
-    const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
+    const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
       if (type === 'ref') {
         proxyInstance._setStore(value)
       } else {
@@ -63,7 +63,7 @@ export const useMainProxy = <T extends Object = any, K extends ProxyInstanceObje
 export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>() => {
   const { proxyInstance, namespace } = useMainProxy<T, K>()
   const state = useSnapshot(proxyInstance.store);
-  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
+  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'ref') {
       proxyInstance._setStore(value)
     } else {
@@ -82,7 +82,7 @@ export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanc
 export const useProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(inital: T) => {
   const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor<K>(inital))
   const state = useSnapshot(proxyInstance.store);
-  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
+  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'ref') {
       proxyInstance._setStore(value)
     } else {
@@ -100,7 +100,7 @@ export const useProxyStore = <T extends Object = any, K extends ProxyInstanceObj
 export const useMainProxyNameStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(namespace: string) => {
   const [proxyInstance] = useState(cacheInstance.createProxy<T, K>({ name: namespace }))
   const state = useSnapshot(proxyInstance.store);
-  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'none') => {
+  const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'ref') {
       proxyInstance._setStore(value)
     } else {
