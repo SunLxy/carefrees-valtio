@@ -29,7 +29,7 @@ export const createCommonMainStore = <T extends Object = any, K extends ProxyIns
     const state = useSnapshot<T>(proxyInstance.store);
     const attr = useContext(MainProxyContext)
     const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
-      if (type === 'ref') {
+      if (type === 'none') {
         proxyInstance._setStore(value)
       } else {
         proxyInstance._setRefStore(value)
@@ -64,7 +64,7 @@ export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanc
   const { proxyInstance, namespace } = useMainProxy<T, K>()
   const state = useSnapshot(proxyInstance.store);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
-    if (type === 'ref') {
+    if (type === 'none') {
       proxyInstance._setStore(value)
     } else {
       proxyInstance._setRefStore(value)
@@ -83,7 +83,7 @@ export const useProxyStore = <T extends Object = any, K extends ProxyInstanceObj
   const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor<K>(inital))
   const state = useSnapshot(proxyInstance.store);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
-    if (type === 'ref') {
+    if (type === 'none') {
       proxyInstance._setStore(value)
     } else {
       proxyInstance._setRefStore(value)
@@ -101,7 +101,7 @@ export const useMainProxyNameStore = <T extends Object = any, K extends ProxyIns
   const [proxyInstance] = useState(cacheInstance.createProxy<T, K>({ name: namespace }))
   const state = useSnapshot(proxyInstance.store);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
-    if (type === 'ref') {
+    if (type === 'none') {
       proxyInstance._setStore(value)
     } else {
       proxyInstance._setRefStore(value)
