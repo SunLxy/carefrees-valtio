@@ -1,7 +1,7 @@
 import { useContext, createContext, createElement, useState } from "react"
 import { useSnapshot, } from "valtio"
 import { ProxyInstanceObject, cacheInstance } from "./instance"
-import { MainProxyProviderProps, CreateMainProviderOptions, MainProxyInstanceType } from "./interface"
+import { MainProxyProviderProps, CreateMainProviderOptions, ProxyInstanceObjectStoreType } from "./interface"
 
 const MainProxyContext = createContext<{ namespace: string, proxyInstance: ProxyInstanceObject<any> }>({ namespace: undefined, proxyInstance: undefined })
 
@@ -79,8 +79,8 @@ export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanc
 /**
  * 状态管理(===>useState)
 */
-export const useProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(inital: T) => {
-  const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor<K>(inital))
+export const useProxyStore = <T extends ProxyInstanceObjectStoreType = ProxyInstanceObjectStoreType>(inital: T) => {
+  const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor(inital))
   const state = useSnapshot(proxyInstance.store);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'none') {
@@ -112,8 +112,8 @@ export const useMainProxyNameStore = <T extends Object = any, K extends ProxyIns
   return { state, dispatch, namespace, proxyInstance, temps }
 }
 
-export const connecMainProxy = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(namespace: string, MainProxyInstance: K, Component: React.FC) => {
-  const pageInstance = new (MainProxyInstance as unknown as MainProxyInstanceType<T>)(namespace)
+export const connecMainProxy = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>, M extends { new(...args: any[]): K } = { new(...args: any[]): K }>(namespace: string, MainProxyInstance: M, Component: React.FC) => {
+  const pageInstance = new MainProxyInstance(namespace)
 
   return (props: any) => {
     const [proxyInstance] = useState(() => {

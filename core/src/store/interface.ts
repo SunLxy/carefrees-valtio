@@ -8,12 +8,8 @@ export interface CreateMainProviderOptions<T extends Object = any, K extends Pro
   initalValue?: T
 }
 
-export interface MainInstanceInterfaceObject extends Object {
+export interface ProxyInstanceObjectStoreType extends Object {
   /**loading存储*/
   loading?: Record<string, boolean>
   [s: string]: any
-}
-
-export interface MainProxyInstanceType<T> extends ProxyInstanceObject<T> {
-  new(namespace?: string)
 }

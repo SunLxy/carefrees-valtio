@@ -1,42 +1,56 @@
 
 import { proxy, ref } from "valtio"
+import type { ProxyInstanceObjectStoreType } from "./interface"
 /**
  * 基础操作 Proxy 对象
  * */
-export class ProxyInstanceObject<T extends Object = any> {
-  store: T;
+export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyInstanceObjectStoreType> {
+  store = proxy({ loading: {} } as T);
+  /**页面状态名称*/
   namespace?: string
+  /**是否加载loading*/
+  isPageLoading?: boolean
+  /**判断是否已经实例化*/
+  is_main_page_ctor = false;
+  /**默认值*/
+  defaultInital = {
+    /**loading加载数据*/
+    loading: {}
+  }
   constructor(namespace?: string) {
     this.namespace = namespace
   }
   /**初始store对象*/
-  _ctor = <K = typeof this>(state: T) => {
-    this.store = proxy(state) as T;
-    return this as unknown as K;
+  _ctor = <K extends T = T>(state: K) => {
+    this.store = proxy(state);
+    return this
   }
   /**设置对象属性值*/
-  _setStore = <K = T>(value?: Partial<K>) => {
+  _setStore = <K extends T = T>(value?: Partial<K>) => {
     if (!this.store) {
-      this.store = proxy({}) as T;
+      this.store = proxy({ ...this.defaultInital } as K);
     }
     if (value) {
       Object.keys(value).forEach((key) => {
+        // @ts-ignore
         this.store[key] = value[key]
       })
     }
     return this;
   }
   /**设置不做监听的ref对象属性值*/
-  _setRefStore = <K = T>(value?: Partial<K>) => {
+  _setRefStore = <K extends T = T>(value?: Partial<K>) => {
     if (!this.store) {
-      this.store = proxy({}) as T;
+      this.store = proxy({ ...this.defaultInital } as K);
     }
     if (value) {
       Object.keys(value).forEach((key) => {
         const newValue = value[key];
         if (typeof newValue === "object" && newValue) {
+          // @ts-ignore
           this.store[key] = this._createRef(value[key])
         } else {
+          // @ts-ignore
           this.store[key] = value[key]
         }
       })
@@ -72,6 +86,33 @@ export class ProxyInstanceObject<T extends Object = any> {
   _getAllProxyCache = () => {
     return cacheInstance
   }
+
+  /**初始化状态值*/
+  main_store = (initalValues: Partial<T> = {}) => {
+    const newStore = { ...this.defaultInital, ...initalValues } as unknown as T
+    this._ctor(newStore)
+  }
+
+  /**更新页面级的 pageLoading */
+  updatedPageLoading = (loading: boolean = true) => {
+    if (typeof this.store?.loading === "object") {
+      this.store.loading.pageLoading = loading
+    } else {
+      this.store.loading = { pageLoading: loading }
+    }
+  }
+
+  /**默认实例化方法*/
+  main_ctor = () => {
+    if (this.is_main_page_ctor) {
+      return this;
+    }
+    /**初始掉数据*/
+    this.is_main_page_ctor = true;
+    this.main_store();
+    return this;
+  }
+
 }
 
 export interface ProxyCacheInstanceOptions<T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>> {
