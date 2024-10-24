@@ -90,7 +90,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
   }
 
   /**设置namespace，把当前实体保存到缓存中*/
-  _insert_cache = (namespace?: string) => {
+  _insertProxyCache = (namespace?: string) => {
     this.namespace = namespace || this.namespace
     if (this.namespace) {
       cacheInstance.setProxy(this.namespace, this);
@@ -98,7 +98,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     return this;
   }
   /**设置namespace，把当前实体从缓存中删除*/
-  _remove_cache = (namespace?: string) => {
+  _removeProxyCache = (namespace?: string) => {
     this.namespace = namespace || this.namespace
     if (this.namespace) {
       cacheInstance.deleteProxy(this.namespace);
