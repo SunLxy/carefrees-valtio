@@ -18,8 +18,8 @@
   },
   "scripts": {
     "build": "npm run build:esm && npm run build:cjs",
-    "build:cjs": "tsbb build",
-    "build:esm": "tsbb build src/*.ts --use-babel --esm ./esm",
+    "build:cjs": "tsc --project tsconfig.cjs.json",
+    "build:esm": "tsc --project tsconfig.json",
     "watch": "tsbb watch"
   },
   "dependencies": {
