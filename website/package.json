@@ -1,9 +1,9 @@
 {
   "name": "website",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "private": true,
   "dependencies": {
-    "@carefrees/valtio": "0.0.10",
+    "@carefrees/valtio": "0.0.11",
     "react": "~18.2.0",
     "react-dom": "~18.2.0"
   },
