@@ -81,6 +81,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     } else {
       delete this.store[names]
     }
+    return this;
   }
 
   /**根据名称获取某个实例*/
@@ -94,6 +95,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     if (this.namespace) {
       cacheInstance.setProxy(this.namespace, this);
     }
+    return this;
   }
   /**设置namespace，把当前实体从缓存中删除*/
   _remove_cache = (namespace?: string) => {
@@ -101,6 +103,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     if (this.namespace) {
       cacheInstance.deleteProxy(this.namespace);
     }
+    return this;
   }
 
   /**获取缓存数据实例*/
@@ -112,6 +115,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
   main_store = (initalValues: Partial<T> = {}) => {
     const newStore = { ...this.defaultInital, ...initalValues } as unknown as T
     this._ctor(newStore)
+    return this;
   }
 
   /**更新页面级的 pageLoading */
@@ -121,6 +125,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     } else {
       this.store.loading = { pageLoading: loading }
     }
+    return this;
   }
 
   /**默认实例化方法*/
@@ -133,7 +138,6 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     this.main_store();
     return this;
   }
-
 }
 
 export interface ProxyCacheInstanceOptions<T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>> {
