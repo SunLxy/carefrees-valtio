@@ -17,8 +17,14 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     /**loading加载数据*/
     loading: {}
   }
+  /**当存在 namespace 值时，在new的时候是否把当前对象存储到缓存中*/
+  isInsertCase?: boolean = false
+
   constructor(namespace?: string) {
-    this.namespace = namespace
+    this.namespace = namespace || this.namespace
+    if (this.isInsertCase && this.namespace) {
+      cacheInstance.setProxy(this.namespace, this);
+    }
   }
   /**初始store对象*/
   _ctor = <K extends T = T>(state: K) => {
