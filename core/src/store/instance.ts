@@ -12,20 +12,19 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
   isPageLoading?: boolean
   /**判断是否已经实例化*/
   is_main_page_ctor = false;
+  /**所有缓存实体类*/
+  proxyAllCacheInstance?: ProxyInstanceCache;
   /**默认值*/
   defaultInital = {
     /**loading加载数据*/
     loading: {}
   }
-  /**当存在 namespace 值时，在new的时候是否把当前对象存储到缓存中*/
-  isInsertCase?: boolean = false
 
   constructor(namespace?: string) {
     this.namespace = namespace || this.namespace
-    if (this.isInsertCase && this.namespace) {
-      cacheInstance.setProxy(this.namespace, this);
-    }
+    this.proxyAllCacheInstance = cacheInstance;
   }
+
   /**初始store对象*/
   _ctor = <K extends T = T>(state: K) => {
     this.store = proxy(state);
@@ -88,6 +87,22 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
   _getProxyCache = (name: string) => {
     return cacheInstance.getProxy(name);
   }
+
+  /**设置namespace，把当前实体保存到缓存中*/
+  _insert_cache = (namespace?: string) => {
+    this.namespace = namespace || this.namespace
+    if (this.namespace) {
+      cacheInstance.setProxy(this.namespace, this);
+    }
+  }
+  /**设置namespace，把当前实体从缓存中删除*/
+  _remove_cache = (namespace?: string) => {
+    this.namespace = namespace || this.namespace
+    if (this.namespace) {
+      cacheInstance.deleteProxy(this.namespace);
+    }
+  }
+
   /**获取缓存数据实例*/
   _getAllProxyCache = () => {
     return cacheInstance
