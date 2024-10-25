@@ -51,7 +51,7 @@ export class ProxyInstanceObject<T extends ProxyInstanceObjectStoreType = ProxyI
     if (value) {
       Object.keys(value).forEach((key) => {
         const newValue = value[key];
-        if (typeof newValue === "object" && newValue) {
+        if (typeof newValue === "function" || (typeof newValue === "object" && value) || typeof newValue === 'symbol') {
           // @ts-ignore
           this.store[key] = this._createRef(value[key])
         } else {
