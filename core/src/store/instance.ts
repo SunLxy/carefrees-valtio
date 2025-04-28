@@ -163,7 +163,7 @@ export class ProxyInstanceCache {
     if (proxyObject) {
       instProxy = proxyObject
     } else if (!isNotCreate) {
-      instProxy = new ProxyInstanceObject<T>()._ctor(inital || {} as T) as K
+      instProxy = new ProxyInstanceObject<T>(name)._ctor(inital || {} as T) as K
     }
     if (name && instProxy) {
       this.proxyMap.set(name, instProxy)

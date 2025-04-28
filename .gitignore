@@ -25,7 +25,7 @@ yarn-error.log*
 node_modules/
 
 yarn.lock
-
+pnpm-lock.yaml
 lib
 esm
 
