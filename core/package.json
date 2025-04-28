@@ -17,10 +17,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:cjs": "tsc --project tsconfig.cjs.json",
-    "build:esm": "tsc --project tsconfig.json",
-    "watch": "tsbb watch"
+    "build": "carefrees-rslib build",
+    "watch": "carefrees-rslib build --watch"
   },
   "dependencies": {
     "valtio": "~1.13.2"
