@@ -5,8 +5,14 @@ import { MainProxyProviderProps, CreateMainProviderOptions, ProxyInstanceObjectS
 
 const MainProxyContext = createContext<{ namespace: string, proxyInstance: ProxyInstanceObject<any> }>({ namespace: undefined, proxyInstance: undefined })
 
-/**创建自定义组合状态管理*/
-export const createCommonMainStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(options: CreateMainProviderOptions<T, K>) => {
+/**
+ * 创建自定义组合状态管理
+ * 
+ * @param {Object} options 参数
+ * @param {Object} snapshotOptions 快照选项
+ * @param {Boolean} snapshotOptions.sync 同步更新(解决中文输入问题)
+*/
+export const createCommonMainStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(options: CreateMainProviderOptions<T, K>, snapshotOptions?: { sync?: boolean; }) => {
 
   const MainProxyContext = createContext<{ namespace: string, proxyInstance: ProxyInstanceObject, initAttr?: any }>({ namespace: undefined, proxyInstance: undefined })
 
@@ -26,7 +32,7 @@ export const createCommonMainStore = <T extends Object = any, K extends ProxyIns
   }
 
   const useMainProxyStore = () => {
-    const state = useSnapshot<T>(proxyInstance.store);
+    const state = useSnapshot<T>(proxyInstance.store, snapshotOptions);
     const attr = useContext(MainProxyContext)
     const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
       if (type === 'none') {
@@ -59,10 +65,12 @@ export const useMainProxy = <T extends Object = any, K extends ProxyInstanceObje
 
 /**
  * 当页面有页面级的实例
+ * @param {Object} snapshotOptions 快照选项
+ * @param {Boolean} snapshotOptions.sync 同步更新(解决中文输入问题)
 */
-export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>() => {
+export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(snapshotOptions?: { sync?: boolean; }) => {
   const { proxyInstance, namespace } = useMainProxy<T, K>()
-  const state = useSnapshot(proxyInstance.store);
+  const state = useSnapshot(proxyInstance.store, snapshotOptions);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'none') {
       proxyInstance._setStore(value)
@@ -78,10 +86,13 @@ export const useMainProxyStore = <T extends Object = any, K extends ProxyInstanc
 
 /**
  * 状态管理(===>useState)
+ * @param inital 初始值
+ * @param {Object} snapshotOptions 快照选项
+ * @param {Boolean} snapshotOptions.sync 同步更新(解决中文输入问题)
 */
-export const useProxyStore = <T extends ProxyInstanceObjectStoreType = ProxyInstanceObjectStoreType>(inital: T) => {
+export const useProxyStore = <T extends ProxyInstanceObjectStoreType = ProxyInstanceObjectStoreType>(inital: T, snapshotOptions?: { sync?: boolean; }) => {
   const [proxyInstance] = useState(new ProxyInstanceObject<T>()._ctor(inital))
-  const state = useSnapshot(proxyInstance.store);
+  const state = useSnapshot(proxyInstance.store, snapshotOptions);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'none') {
       proxyInstance._setStore(value)
@@ -96,10 +107,13 @@ export const useProxyStore = <T extends ProxyInstanceObjectStoreType = ProxyInst
 
 /**
  * 根据存储名称获取实例
+ * @param namespace 命名
+ * @param {Object} snapshotOptions 快照选项
+ * @param {Boolean} snapshotOptions.sync 同步更新(解决中文输入问题)
 */
-export const useMainProxyNameStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(namespace: string) => {
+export const useMainProxyNameStore = <T extends Object = any, K extends ProxyInstanceObject<T> = ProxyInstanceObject<T>>(namespace: string, snapshotOptions?: { sync?: boolean; }) => {
   const [proxyInstance] = useState(cacheInstance.createProxy<T, K>({ name: namespace }))
-  const state = useSnapshot(proxyInstance.store);
+  const state = useSnapshot(proxyInstance.store, snapshotOptions);
   const dispatch = (value: Partial<T>, type: "ref" | "none" = 'ref') => {
     if (type === 'none') {
       proxyInstance._setStore(value)

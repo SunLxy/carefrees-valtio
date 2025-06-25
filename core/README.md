@@ -8,6 +8,21 @@
 yarn add @carefrees/valtio # npm install @carefrees/valtio
 ```
 
+## 解决中文输入问题
+
+通过添加参数`sync`解决中文输入问题，[valtio中文输入问题](https://github.com/pmndrs/valtio?tab=readme-ov-file#update-synchronously)
+
+```tsx
+
+import { useProxyStore } from "@carefrees/valtio"
+
+const Demo = ()=>{
+  const { state, dispatch } = useProxyStore({ text:"" }, { sync: true })
+  return <input value={state.text} onChange={(e) => dispatch({ text:e.target.value})} />
+} 
+
+```
+
 ## 使用
 
 ```tsx
