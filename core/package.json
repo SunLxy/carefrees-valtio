@@ -21,7 +21,7 @@
     "watch": "carefrees-rslib build --watch"
   },
   "dependencies": {
-    "valtio": "~1.13.2"
+    "valtio": "~2.1.5"
   },
   "devDependencies": {
     "@types/react": "~18.2.15",
